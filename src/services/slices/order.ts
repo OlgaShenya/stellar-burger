@@ -1,18 +1,20 @@
-import { orderBurgerApi } from '@api';
+import { orderBurgerApi } from '../../utils/burger-api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 
 export interface TOrderState {
   data: TOrder | null;
   isLoading: boolean;
+  error: string | null;
 }
 
 const initialState: TOrderState = {
   data: null,
-  isLoading: false
+  isLoading: false,
+  error: null
 };
 
-const orderSlice = createSlice({
+export const orderSlice = createSlice({
   name: 'order',
   initialState,
   reducers: {
@@ -27,12 +29,14 @@ const orderSlice = createSlice({
       .addCase(orderBurger.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(orderBurger.rejected, (state) => {
+      .addCase(orderBurger.rejected, (state, action) => {
         state.isLoading = false;
+        state.error = action.error.message!;
       })
       .addCase(orderBurger.fulfilled, (state, action) => {
         state.isLoading = false;
         state.data = action.payload.order;
+        state.error = null;
       });
   }
 });

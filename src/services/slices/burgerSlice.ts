@@ -12,7 +12,7 @@ export const initialState: TConstructorState = {
   ingredients: []
 };
 
-const burgerSlice = createSlice({
+export const burgerSlice = createSlice({
   name: 'burger',
   initialState,
   reducers: {
